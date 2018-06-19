@@ -1,4 +1,5 @@
 #include <uWS/uWS.h>
+#include "Eigen/Dense"
 #include <iostream>
 #include "json.hpp"
 #include <math.h>
@@ -6,6 +7,7 @@
 #include "tools.h"
 
 using namespace std;
+using namespace Eigen;
 
 // for convenience
 using json = nlohmann::json;
@@ -112,10 +114,10 @@ int main()
 
     	  VectorXd estimate(4);
 
-    	  double p_x = fusionEKF.ekf_.x_(0);
-    	  double p_y = fusionEKF.ekf_.x_(1);
-    	  double v1  = fusionEKF.ekf_.x_(2);
-    	  double v2 = fusionEKF.ekf_.x_(3);
+    	  double p_x = fusionEKF.ekf().x()(0);
+    	  double p_y = fusionEKF.ekf().x()(1);
+    	  double v1  = fusionEKF.ekf().x()(2);
+    	  double v2 = fusionEKF.ekf().x()(3);
 
     	  estimate(0) = p_x;
     	  estimate(1) = p_y;

@@ -1,5 +1,10 @@
-#ifndef FusionEKF_H_
-#define FusionEKF_H_
+
+/** @file FusionEKF.h
+ *  @author Andrey N. Zabegaev <speench@gmail.com>
+ */
+
+#ifndef _FusionEKF_h_
+#define _FusionEKF_h_
 
 #include "measurement_package.h"
 #include "Eigen/Dense"
@@ -9,41 +14,40 @@
 #include "kalman_filter.h"
 #include "tools.h"
 
-class FusionEKF {
+class FusionEKF
+{
 public:
-  /**
-  * Constructor.
-  */
-  FusionEKF();
 
-  /**
-  * Destructor.
-  */
-  virtual ~FusionEKF();
+    /** @brief Constructor
+    */
+    FusionEKF();
 
-  /**
-  * Run the whole flow of the Kalman Filter from here.
-  */
-  void ProcessMeasurement(const MeasurementPackage &measurement_pack);
+    /** @brief Destructor
+    */
+    virtual ~FusionEKF();
 
-  /**
-  * Kalman Filter update and prediction math lives in here.
-  */
-  KalmanFilter ekf_;
+    /** @brief Run the whole flow of the Kalman Filter from here
+    *  @param[in] measurement_pack new measurement data
+    */
+    void ProcessMeasurement(const MeasurementPackage &measurement_pack);
 
-private:
-  // check whether the tracking toolbox was initialized or not (first measurement)
-  bool is_initialized_;
-
-  // previous timestamp
-  long long previous_timestamp_;
-
-  // tool object used to compute Jacobian and RMSE
-  Tools tools;
-  Eigen::MatrixXd R_laser_;
-  Eigen::MatrixXd R_radar_;
-  Eigen::MatrixXd H_laser_;
-  Eigen::MatrixXd Hj_;
+    /**
+    * Kalman Filter update and prediction math lives in here.
+    */
+    KalmanFilter ekf();
+    
+protected:
+    
+    bool						_is_initialized;								//!< check whether the tracking toolbox was initialized or not (first measurement)
+    long long					_previous_timestamp;							//!< previous timestamp
+    Tools						_tools;										//!<  tool object used to compute Jacobian and RMSE
+    Eigen::MatrixXd				_R_laser;										//!< laser measurement covariance matrix
+    Eigen::MatrixXd				_R_radar;									//!< radar measurement covariance matrix
+    Eigen::MatrixXd				_H_laser;										//!< H matrix for laer measurement
+    KalmanFilter 				_ekf;										//!< Kalman Filter math object
+    double						_noise_ax;									//!< movement noise over x axis
+    double						_noise_ay;									//!< movement noise over y axis
+    
 };
 
-#endif /* FusionEKF_H_ */
+#endif /* _FusionEKF_h_ */
